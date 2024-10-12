@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 120px);
+            grid-gap: 10px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .display {
+            grid-column: span 4;
+            padding: 20px;
+            font-size: 2rem;
+            background-color: #222;
+            color: white;
+            text-align: right;
+            border-radius: 10px;
+        }
+
+        .button {
+            padding: 25px;
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button-1 { background-color: #f44336; } /* Red */
+        .button-2 { background-color: #4CAF50; } /* Green */
+        .button-3 { background-color: #2196F3; } /* Blue */
+        .button-4 { background-color: #FFEB3B; } /* Yellow */
+        .button-5 { background-color: #9C27B0; } /* Purple */
+        .button-6 { background-color: #FF9800; } /* Orange */
+        .button-7 { background-color: #795548; } /* Brown */
+        .button-8 { background-color: #00BCD4; } /* Cyan */
+        .button-9 { background-color: #3F51B5; } /* Indigo */
+        .button-0 { background-color: #E91E63; } /* Pink */
+        .button-equal { background-color: #009688; } /* Teal */
+        .button-clear { background-color: #607D8B; } /* Gray */
+        .button-operator { background-color: #673AB7; } /* Deep Purple */
+
+        @media (max-width: 600px) {
+            .calculator {
+                grid-template-columns: repeat(4, 70px);
+            }
+
+            .button {
+                padding: 15px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <button class="button button-7" onclick="appendNumber(7)">7</button>
+        <button class="button button-8" onclick="appendNumber(8)">8</button>
+        <button class="button button-9" onclick="appendNumber(9)">9</button>
+        <button class="button button-operator" onclick="chooseOperation('+')">+</button>
+        <button class="button button-4" onclick="appendNumber(4)">4</button>
+        <button class="button button-5" onclick="appendNumber(5)">5</button>
+        <button class="button button-6" onclick="appendNumber(6)">6</button>
+        <button class="button button-operator" onclick="chooseOperation('-')">-</button>
+        <button class="button button-1" onclick="appendNumber(1)">1</button>
+        <button class="button button-2" onclick="appendNumber(2)">2</button>
+        <button class="button button-3" onclick="appendNumber(3)">3</button>
+        <button class="button button-operator" onclick="chooseOperation('*')">&times;</button>
+        <button class="button button-clear" onclick="clearDisplay()">C</button>
+        <button class="button button-0" onclick="appendNumber(0)">0</button>
+        <button class="button button-equal" onclick="compute()">=</button>
+        <button class="button button-operator" onclick="chooseOperation('/')">÷</button>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentOperand = '';
+        let previousOperand = '';
+        let operation = undefined;
+
+        function appendNumber(number) {
+            if (currentOperand === '0' && number === 0) return;
+            if (currentOperand.includes('.') && number === '.') return;
+            currentOperand = currentOperand.toString() + number.toString();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            display.innerText = currentOperand || '0';
+        }
+
+        function chooseOperation(op) {
+            if (currentOperand === '') return;
+            if (previousOperand !== '') {
+                compute();
+            }
+            operation = op;
+            previousOperand = currentOperand;
+            currentOperand = '';
+        }
+
+        function compute() {
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) return;
+            switch (operation) {
+                case '+':
+                    computation = prev + current;
+                    break;
+                case '-':
+                    computation = prev - current;
+                    break;
+                case '*':
+                    computation = prev * current;
+                    break;
+                case '/':
+                    computation = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            currentOperand = computation;
+            operation = undefined;
+            previousOperand = '';
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentOperand = '';
+            previousOperand = '';
+            operation = undefined;
+            updateDisplay();
+        }
+    </script>
+</body>
+  </html>
